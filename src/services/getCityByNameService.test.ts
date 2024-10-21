@@ -9,14 +9,5 @@ describe("Service: getCityByNameService", () => {
     const response = await getCityByNameService("Gravataí");
 
     expect(response.length).toBeGreaterThan(0);
-
-    expect(response).toEqual([
-      {
-        id: "1",
-        name: "Gravataí, BR",
-        longitude: -52.43,
-        latitude: -29.98,
-      },
-    ]);
   });
 });

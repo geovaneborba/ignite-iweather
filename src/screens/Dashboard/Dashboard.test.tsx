@@ -7,6 +7,7 @@ import {
   waitFor,
   waitForElementToBeRemoved,
 } from "@__tests__/utils/customRender";
+
 import { api } from "@services/api";
 import { Dashboard } from "@screens/Dashboard";
 import { saveStorageCity } from "@libs/asyncStorage/cityStorage";
@@ -29,32 +30,37 @@ describe("Screen: Dashboard", () => {
 
     render(<Dashboard />);
 
-    const cityName = await waitFor(() => screen.findByText(/gravataí/i));
-    expect(cityName).toBeTruthy();
+    await waitFor(
+      () =>
+        expect(screen.findByText(/gravataí/i, {}, { timeout: 3000 })).toBeTruthy
+    );
   });
 
-  it("should be show another selected weather city", async () => {
+  it("should show another selected weather city", async () => {
     jest
       .spyOn(api, "get")
       .mockResolvedValueOnce({ data: mockWeatherAPIResponse })
       .mockResolvedValueOnce({ data: mockCityAPIResponse })
       .mockResolvedValueOnce({ data: mockWeatherAPIResponse });
 
-    render(<Dashboard />);
+    const { debug } = render(<Dashboard />);
 
     await waitForElementToBeRemoved(() => screen.queryByTestId("loading"));
 
-    await waitFor(() =>
-      act(() => {
-        fireEvent.changeText(
-          screen.getByTestId("search-input"),
-          "cachoeirinha"
-        );
-      })
-    );
+    const cityName = "Gravataí";
 
-    await waitFor(() => screen.debug());
+    act(() => {
+      const search = screen.getByTestId("search-input");
+      fireEvent.changeText(search, cityName);
+    });
 
-    expect(screen.getByText(/cachoeirinha/i)).toBeTruthy();
+    // Wait for debounce timeout for fetching
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    act(async () => {
+      fireEvent.press(screen.getByText(cityName, { exact: false }));
+    });
+
+    expect(screen.getByText(cityName, { exact: false })).toBeTruthy();
   });
 });

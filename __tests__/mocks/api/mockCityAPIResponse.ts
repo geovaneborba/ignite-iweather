@@ -7,7 +7,7 @@ export const mockCityAPIResponse: CityAPIResponse = {
     country: "BR",
   },
   coord: {
-    lon: -52.43,
-    lat: -29.98,
+    lat: 123,
+    lon: 456,
   },
 };
