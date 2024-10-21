@@ -12,18 +12,18 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "18.x"
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
       - name: Run tests
-        run: npm run test
+        run: yarn test
 
   CD:
     name: Continuous Delivery
@@ -44,7 +44,7 @@ jobs:
         uses: expo/expo-github-action@v8
         with:
           eas-version: "latest"
-          packager: npm
+          packager: yarn
           token: ${{ secrets.EAS_EXPO_TOKEN }}
 
       - name: Build Android
