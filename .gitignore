@@ -19,9 +19,6 @@ web-build/
 # Environment variables
 .env
 
-# test coverage 
-__tests__
-
 # build
 android
 ios
